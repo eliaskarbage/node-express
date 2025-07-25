@@ -1,5 +1,5 @@
-const sequelize = require('../config/database');
-
+import sequelize from '../config/database.js';
+import Users from './Users.js';
 
 //conectar ao banco de dados
 const connectToDatabase = async () => {
@@ -16,4 +16,4 @@ const connectToDatabase = async () => {
 
 }
 
-module.exports = {connectToDatabase, Usuarios, Alunos, Professores};
+export {connectToDatabase, Users};
