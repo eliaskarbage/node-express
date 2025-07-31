@@ -55,7 +55,7 @@ const updateBooks = async (req, res) => {
         
         // middleware para verificar se os dados necessários estão presentes
         if(!category_id || !title || !author || !description || !published_date) {
-            return res.status(400).send({message: 'Dados incompletos para criar um novo livro'}); // Retornando 400 se os dados estiverem incompletos
+            return res.status(400).send({message: 'Dados incompletos para alterar um livro'}); // Retornando 400 se os dados estiverem incompletos
         }
 
         const id = req.params.id; // Obtendo o ID do livro a ser atualizado
