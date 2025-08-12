@@ -37,7 +37,10 @@ const Books = sequelize.define('Books', {
   available: {
     type: DataTypes.BOOLEAN,
     defaultValue: true // Por padrão, os livros estão disponíveis
-  }
+  },
+  img: {
+    type: DataTypes.STRING
+  },
 }, {
   tableName: 'books',
   timestamps: true

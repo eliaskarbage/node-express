@@ -1,8 +1,21 @@
 import Books from '../models/Books.js';
+import { Op } from 'sequelize'; // Importando Op para operações de comparação
 
 const getAllBooks = async (req, res) => {
     try {
-        const booksAll = await Books.findAll() // Buscando todos os livros
+        const { category_id, busca } = req.query; // Obtendo os parâmetros de consulta
+        const where = {}; // Inicializando o objeto de condições
+
+        if (category_id) {
+            where.category_id = category_id; // Adicionando condição para categoria
+        }
+
+        if (busca) {
+            where.title = { [Op.like]: `%${busca}%` }; // Adicionando condição de busca por título
+            where.author = { [Op.like]: `%${busca}%` }; // Adicionando condição de busca por título
+        }
+
+        const booksAll = await Books.findAll({where}) // Buscando todos os livros
         res.status(200).json(booksAll); // Enviando status 200 e a lista de livros como resposta
     } catch (error) {
         console.error('Erro ao buscar livros:', error);
@@ -25,7 +38,7 @@ const getBook = async (req, res) => {
 const createBooks = async (req, res) => {
     try {
 
-        const { category_id, title, author, description, published_date, available } = req.body; // Desestruturando os dados do corpo da requisição
+        const { category_id, title, author, description, published_date, available, img } = req.body; // Desestruturando os dados do corpo da requisição
         
         // middleware para verificar se os dados necessários estão presentes
         if(!category_id || !title || !author || !description || !published_date) {
@@ -38,7 +51,8 @@ const createBooks = async (req, res) => {
             author,
             description,
             published_date,
-            available: available || true // Definindo 'available' como true por padrão se não
+            available: available || true, // Definindo 'available' como true por padrão se não
+            img
         }); // Criando um novo livro com os dados do corpo da requisição
         res.status(200).json(livro); // Enviando status 200 e os dados do livro criado como resposta
 
@@ -51,7 +65,7 @@ const createBooks = async (req, res) => {
 const updateBooks = async (req, res) => {
     try {
 
-        const { category_id, title, author, description, published_date, available } = req.body; // Desestruturando os dados do corpo da requisição
+        const { category_id, title, author, description, published_date, available, img } = req.body; // Desestruturando os dados do corpo da requisição
         
         // middleware para verificar se os dados necessários estão presentes
         if(!category_id || !title || !author || !description || !published_date) {
@@ -69,7 +83,8 @@ const updateBooks = async (req, res) => {
             author,
             description,
             published_date,
-            available: available || true }); // Atualizando os dados do livro
+            available: available || true }), // Atualizando os dados do livro
+            img
 
         res.status(200).json(livro); // Enviando status 200 e os dados atualizados do livro
         
